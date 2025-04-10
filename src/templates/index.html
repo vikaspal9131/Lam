@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Nuvaria</title>
+
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="./css/custom.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/locomotive-scroll@3.5.4/dist/locomotive-scroll.css">
+  <link href="https://cdn.jsdelivr.net/npm/remixicon@4.3.0/fonts/remixicon.css" rel="stylesheet" />
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    .loader {
+      font-weight: bold;
+      font-size: 30px;
+      padding-bottom: 8px;
+      background: linear-gradient(currentColor 0 0) 0 100%/0% 3px no-repeat;
+      animation: l2 2s linear infinite;
+    }
+    @keyframes l2 { to { background-size: 100% 3px } }
+  </style>
+</head>
+<body class="bg-black text-white font-[Poppins]">
+  <div id="main" class="min-h-screen flex flex-col">
+
+    <!-- Navbar -->
+    <nav class="flex items-center justify-between px-6 md:px-20 py-6">
+      <a href="#" class="text-xl flex items-center space-x-2">
+        <i class="ri-artboard-2-line"></i>
+        <span>Nexora</span>
+      </a>
+      <div class="flex items-center space-x-4">
+        <a id="login-btn" href="/login" class="bg-green-400 text-black px-4 py-1 rounded-md hover:bg-green-500">Login</a>
+        <div id="user-profile" class="hidden">
+          <img id="user-img" src="default-avatar.png" alt="User Profile" class="w-10 h-10 rounded-full border border-gray-300 shadow-sm">
+        </div>
+      </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="flex flex-col mt-[140px] px-20">
+      <h1 class="text-4xl md:text-6xl">
+        Nexora AI-powered visuals, <br>  shaping ideas effortlessly.
+      </h1>
+      <p class="text-lg md:text-xl py-4 md:py-5">
+        Eveniet aut molestiae impedit distinctio, asperiores laboriosam <br class="hidden md:block">
+        Lorem ipsum dolor sit amet consectetur adipisicing elit.
+      </p>
+      <div class="flex flex-col md:flex-row  gap-4 w-full max-w-lg">
+        <input type="text" id="inputField" placeholder="Past Your URL " 
+          class="w-full px-4 py-2  rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 text-black">
+        <a href="/summary" class="px-4 py-2 w-[120px] bg-green-400 text-black rounded-lg hover:bg-green-500">
+          Summarize 
+        </a>
+      </div>
+    </div>
+
+
+    <div class="px-20 mt-[90px]">
+        
+
+        <h1 class="text-[40px] font-semibold ">Summary</h1>
+        <h1 id="Summary" class="text-[14px] mt-[20px] font-light py-6">
+        </h1>
+    </div>
+    
+</div>
+<footer class="flex items-center justify-center">
+  <p>Made by Sphinx 💚 © 2025 Nexora </p> 
+</footer>
+
+<script src="index.js"></script>
+</body>
+</html>
