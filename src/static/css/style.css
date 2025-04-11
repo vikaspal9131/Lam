@@ -1,0 +1,40 @@
+@media (max-width: 426px) {
+  /* 425px ya usse chhoti screen ke liye styling */
+
+  
+  #hero{
+    text-align: start;
+    padding: 0px 0px 0px 20px;
+    align-items: start;
+    overflow-x: hidden;
+    margin-top: 80px;
+  }
+  #hero h1{
+    width: 100vw;
+    font-size: 9.7vw;
+    line-height:9.7vw;
+    background: none;
+  }
+  #hero p{
+    width: 100vw;
+    font-size: 3.5vw;
+    line-height:4vw;
+    background: none;
+    color: rgb(197, 195, 195);
+  }
+
+  #summaryForm{
+    width: 90vw;
+    display: flex;
+    align-items: start;
+  }
+
+  #summaryForm input{
+    padding: 4px;
+    padding-left: 20px;
+  }
+  #summaryForm button{
+    padding: 4px;
+    
+  }
+}
