@@ -45,37 +45,108 @@
     </nav>
 
     <!-- Main Content -->
-    <div class="flex flex-col mt-[140px] px-20">
+    <div class="flex flex-col mt-[140px] px-20 text-center items-center">
       <h1 class="text-4xl md:text-6xl">
-        Lem AI-powered visuals, <br>  shaping ideas effortlessly.
+        Lem AI-powered visuals, <br> shaping ideas effortlessly.
       </h1>
       <p class="text-lg md:text-xl py-4 md:py-5">
         Eveniet aut molestiae impedit distinctio, asperiores laboriosam <br class="hidden md:block">
         Lorem ipsum dolor sit amet consectetur adipisicing elit.
       </p>
-      <div class="flex flex-col md:flex-row  gap-4 w-full max-w-lg">
-        <input type="text" id="inputField" placeholder="Past Your URL " 
-          class="w-full px-4 py-2  rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 text-black">
-        <a href="/summary" class="px-4 py-2 w-[120px] bg-green-400 text-black rounded-lg hover:bg-green-500">
-          Summarize 
-        </a>
+    
+      <!-- 👇 Added spacing using 'mb-10' to form section -->
+      <div class="flex md:flex-row gap-4 w-full max-w-lg ">  
+        <form id="summaryForm" class="flex gap-4 items-center w-full">
+          <input type="text" name="url" id="urlInput" placeholder="Enter URL" required
+            class="w-full px-4 py-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 text-black" />
+          <button type="submit"
+            class="px-4 py-2 w-[120px] bg-green-400 text-black rounded-lg hover:bg-green-500">Submit</button>
+        </form>
+      </div>
+
+    
+      
+      <div id="output" class="mt-[90px] text-start hidden  ">
+        <h3 class="text-4xl">Summary</h3>
+        <p id="summary"></p>
+        
+        <h3 class="text-4xl">Key Points</h3>
+        <ul id="keyPoints" class="mt-[20px]"></ul>
+
+   
+      
+        <h3 class="text-4xl">Code Explanation</h3>
+        <div id="codeExplanations" class="mt-[10px]"></div>
       </div>
     </div>
 
-
-    <div class="px-20 mt-[90px]">
-        
-
-        <!-- <h1 class="text-[40px] font-semibold ">Summary</h1> -->
-        <h1 id="Summary" class="text-[14px] mt-[20px] font-light py-6">
-        </h1>
-    </div>
+ 
     
-</div>
-<footer class="flex items-center justify-center">
-  <p>Made by Sphinx 💚 © 2025 Lem </p> 
-</footer>
 
-<script src="index.js"></script>
+
+ 
+</div>
+<!-- <footer class="flex items-center justify-cente">
+  <p>Made by Sphinx 💚 © 2025 Lem </p> 
+</footer> -->
+
+<script>
+
+document.getElementById('summaryForm').addEventListener('submit', async function(e) {
+  e.preventDefault();
+
+  const url = document.getElementById('urlInput').value;
+
+  const response = await fetch('/api/summary', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/x-www-form-urlencoded',
+    },
+    body: new URLSearchParams({ url: url })
+  });
+
+  const data = await response.json();
+
+  // Show output box now
+  const outputBox = document.getElementById('output');
+  outputBox.classList.remove('hidden');
+
+  // Show summary
+  document.getElementById('summary').textContent = data.summary || "No summary.";
+
+  // Show key points
+  const keyPointsList = document.getElementById('keyPoints');
+  keyPointsList.innerHTML = '';
+  if (data.key_points) {
+    data.key_points.forEach(point => {
+      const li = document.createElement('li');
+      li.textContent = point;
+      keyPointsList.appendChild(li);
+    });
+  }
+
+  // Show code explanations
+  const codeDiv = document.getElementById('codeExplanations');
+  codeDiv.innerHTML = '';
+  if (data.code_explanation) {
+    data.code_explanation.forEach(block => {
+      const codeBlock = document.createElement('pre');
+      codeBlock.textContent = block.code;
+
+      const explanation = document.createElement('p');
+      explanation.textContent = block.explanation;
+
+      codeDiv.appendChild(codeBlock);
+      codeDiv.appendChild(explanation);
+    });
+  }
+
+  if (data.error) {
+    alert("❌ " + data.error);
+    outputBox.classList.add('hidden'); // Hide if error
+  }
+});
+
+</script>
 </body>
 </html>
