@@ -7,7 +7,8 @@
 
   <!-- Tailwind CSS -->
   <script src="https://cdn.tailwindcss.com"></script>
-  <link rel="stylesheet" href="/src/static/css/style.css">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/locomotive-scroll@3.5.4/dist/locomotive-scroll.css">
   <link href="https://cdn.jsdelivr.net/npm/remixicon@4.3.0/fonts/remixicon.css" rel="stylesheet" />
 
@@ -16,16 +17,6 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
-  <!-- <style>
-    .loader {
-      font-weight: bold;
-      font-size: 30px;
-      padding-bottom: 8px;
-      background: linear-gradient(currentColor 0 0) 0 100%/0% 3px no-repeat;
-      animation: l2 2s linear infinite;
-    }
-    @keyframes l2 { to { background-size: 100% 3px } }
-  </style> -->
 </head>
 <body class="bg-black text-white font-[Poppins]">
   <div id="main">
@@ -54,7 +45,7 @@
         Lorem ipsum dolor sit amet consectetur adipisicing elit.
       </p>
     
-      <!-- 👇 Added spacing using 'mb-10' to form section -->
+      <!--  Added spacing using 'mb-10' to form section -->
       <div class="flex md:flex-row gap-4 w-full max-w-lg ">  
         <form id="summaryForm" class="flex gap-4 items-center w-full">
           <input type="text" name="url" id="urlInput" placeholder="Enter URL" required
@@ -63,90 +54,21 @@
             class="px-4 py-2 w-[120px] bg-green-400 text-black rounded-lg hover:bg-green-500">Submit</button>
         </form>
       </div>
-
-    
-      
       <div id="output" class="mt-[90px] text-start hidden  ">
         <h3 class="text-4xl">Summary</h3>
         <p id="summary"></p>
-        
         <h3 class="text-4xl">Key Points</h3>
         <ul id="keyPoints" class="mt-[20px]"></ul>
-
-   
-      
         <h3 class="text-4xl">Code Explanation</h3>
         <div id="codeExplanations" class="mt-[10px]"></div>
       </div>
     </div>
-
- 
-    
-
-
-    
+  
   </div>
   <footer class="fixed bottom-0 w-full bg-black text-white text-center py-3 z-50">
     <p>Made by Sphinx 💚 © 2025 Lem</p>
   </footer>
 
-<script>
-
-document.getElementById('summaryForm').addEventListener('submit', async function(e) {
-  e.preventDefault();
-
-  const url = document.getElementById('urlInput').value;
-
-  const response = await fetch('/api/summary', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/x-www-form-urlencoded',
-    },
-    body: new URLSearchParams({ url: url })
-  });
-
-  const data = await response.json();
-
-  // Show output box now
-  const outputBox = document.getElementById('output');
-  outputBox.classList.remove('hidden');
-
-  // Show summary
-  document.getElementById('summary').textContent = data.summary || "No summary.";
-
-  // Show key points
-  const keyPointsList = document.getElementById('keyPoints');
-  keyPointsList.innerHTML = '';
-  if (data.key_points) {
-    data.key_points.forEach(point => {
-      const li = document.createElement('li');
-      li.textContent = point;
-      keyPointsList.appendChild(li);
-    });
-  }
-
-  // Show code explanations
-  const codeDiv = document.getElementById('codeExplanations');
-  codeDiv.innerHTML = '';
-  if (data.code_explanation) {
-    data.code_explanation.forEach(block => {
-      const codeBlock = document.createElement('pre');
-      codeBlock.textContent = block.code;
-
-      const explanation = document.createElement('p');
-      explanation.textContent = block.explanation;
-
-      codeDiv.appendChild(codeBlock);
-      codeDiv.appendChild(explanation);
-    });
-  }
-
-  if (data.error) {
-    alert("❌ " + data.error);
-    outputBox.classList.add('hidden'); // Hide if error
-  }
-});
-
-</script>
+<script src="/src/static/script/index.js"></script>
 </body>
 </html>

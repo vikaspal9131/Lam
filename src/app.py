@@ -8,10 +8,10 @@ from urllib.parse import urlparse
 
 app = Flask(__name__)
 
-# ✅ Configure Gemini API
-genai.configure(api_key="AIzaSyAWEuYIPHmfaE6PlQOUyrH3qVLuT_kiSdE")  # 🔑 Replace this with your actual valid API key
 
-# ✅ Validate URL
+genai.configure(api_key="AIzaSyAWEuYIPHmfaE6PlQOUyrH3qVLuT_kiSdE")  
+
+
 def is_valid_url(url):
     try:
         result = urlparse(url)
@@ -19,12 +19,11 @@ def is_valid_url(url):
     except:
         return False
 
-# ✅ Extract useful text from various tags
+
 def extract_useful_text(soup):
     elements = soup.find_all(['p', 'li', 'span', 'section', 'article'])
     return ' '.join(el.get_text(strip=True) for el in elements if el.get_text(strip=True))
 
-# ✅ AI Summary Generator
 def generate_ai_summary(text, code):
     try:
         model = genai.GenerativeModel("gemini-1.5-flash")
@@ -70,12 +69,15 @@ IMPORTANT: Return only valid JSON. Do not include any extra text or formatting.
     except Exception as e:
         return {'error': f"Error generating summary: {str(e)}"}
 
-# ✅ Home route
 @app.route('/')
 def home():
     return render_template('index.html')
 
-# ✅ API route
+@app.route('/login')
+def login():
+    return render_template('login.html')
+
+
 @app.route('/api/summary', methods=['POST'])
 def generate_summary():
     url = request.form.get('url')
@@ -100,6 +102,6 @@ def generate_summary():
     except Exception as e:
         return jsonify({'error': str(e)}), 500
 
-# ✅ Run the app
+
 if __name__ == '__main__':
     app.run(debug=True)
