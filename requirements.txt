@@ -1,4 +1,6 @@
-flask
+Flask
+gunicorn
 requests
 beautifulsoup4
 google-generativeai
+pip>=25.0.1
