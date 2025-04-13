@@ -1,10 +1,15 @@
 @media (max-width: 426px) {
+
+  body{
+    overflow-x: hidden;
+  }
   #hero{
     text-align: start;
     padding: 0px 0px 0px 20px;
     align-items: start;
     overflow-x: hidden;
-    margin-top: 80px;
+    margin-top: 90px;
+ 
   }
   #hero h1{
     width: 100vw;
@@ -18,6 +23,7 @@
     line-height:4vw;
     background: none;
     color: rgb(197, 195, 195);
+    padding: 20px 30px 20px 0px;
   }
 
   #summaryForm{
@@ -31,7 +37,15 @@
     padding-left: 20px;
   }
   #summaryForm button{
-    padding: 4px;
-    
+    padding: 4px; 
+  }
+  
+  #login-hero{
+    padding: 30px;
+  }
+
+  #output{
+    margin-top: 230px;
+    overflow-x: hidden;
   }
 }
