@@ -5,12 +5,18 @@ import google.generativeai as genai
 import re
 import json
 from urllib.parse import urlparse
+from dotenv import load_dotenv
+import os
 
 app = Flask(__name__)
 
 
-genai.configure(api_key="AIzaSyAWEuYIPHmfaE6PlQOUyrH3qVLuT_kiSdE")  
+load_dotenv()
 
+
+gemini_api_key = os.getenv("GEMINI_API_KEY")
+
+genai.configure(api_key=gemini_api_key)
 
 def is_valid_url(url):
     try:
@@ -32,13 +38,13 @@ You are an intelligent technical summarizer.
 
 Here's the documentation content:
 
-📄 Text:
+Text:
 {text}
 
-💻 Code:
+Code:
 {code}
 
-✍️ Your Task:
+Your Task:
 Return the result in the following JSON format ONLY:
 {{
   "summary": "Short summary of the page...",
