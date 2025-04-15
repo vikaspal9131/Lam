@@ -10,6 +10,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/default.min.css">
 </head>
 <body class="bg-black text-white font-[Poppins]">
   <div id="main">
@@ -47,14 +48,12 @@
 <div id="output" class="mt-[290px] text-start px-6 hidden ">
   <h3 class="text-4xl">Summary</h3>
   <p id="summary"></p>
-  <h3 class="text-4xl">Key Points</h3>
-  <ul id="keyPoints" class="mt-[20px]"> 
-  </ul>
   <h3 class="text-4xl">Code Explanation</h3>
   <div id="codeExplanations" class="mt-[10px]"></div>
 </div>
 
-
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+<script>hljs.highlightAll();</script>
 <script src="{{ url_for('static', filename='script/index.js') }}"></script>
 
 </body>

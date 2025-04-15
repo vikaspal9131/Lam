@@ -36,7 +36,67 @@ const phrases = [
   typeEffect();
 
 
-document.getElementById('summaryForm').addEventListener('submit', async function(e) {
+
+
+
+// document.getElementById('summaryForm').addEventListener('submit', async function(e) {
+//   e.preventDefault();
+
+
+//   const url = document.getElementById('urlInput').value;
+
+//   const response = await fetch('/api/summary', {
+//     method: 'POST',
+//     headers: {
+//       'Content-Type': 'application/x-www-form-urlencoded',
+//     },
+//     body: new URLSearchParams({ url: url })
+//   });
+
+//   const data = await response.json();
+
+ 
+//   const outputBox = document.getElementById('output');
+//   outputBox.classList.remove('hidden');
+
+//   document.getElementById('summary').textContent = data.summary || "No summary.";
+
+
+//   const keyPointsList = document.getElementById('keyPoints');
+//   keyPointsList.innerHTML = '';
+//   if (data.key_points) {
+//     data.key_points.forEach(point => {
+//       const li = document.createElement('li');
+//       li.textContent = point;
+//       keyPointsList.appendChild(li);
+//     });
+//   }
+
+
+//   const codeDiv = document.getElementById('codeExplanations');
+//   codeDiv.innerHTML = '';
+//   if (data.code_explanation) {
+//     data.code_explanation.forEach(block => {
+//       const codeBlock = document.createElement('pre');
+//       codeBlock.textContent = block.code;
+
+//       const explanation = document.createElement('p');
+//       explanation.textContent = block.explanation;
+
+//       codeDiv.appendChild(codeBlock);
+//       codeDiv.appendChild(explanation);
+//     });
+//   }
+
+//   if (data.error) {
+//     alert(data.error);
+//     outputBox.classList.add('hidden'); 
+//   }
+// });
+
+
+
+document.getElementById('summaryForm').addEventListener('submit', async function (e) {
   e.preventDefault();
 
   const url = document.getElementById('urlInput').value;
@@ -53,36 +113,49 @@ document.getElementById('summaryForm').addEventListener('submit', async function
 
   const outputBox = document.getElementById('output');
   const summaryPara = document.getElementById('summary');
-  const keyPointsList = document.getElementById('keyPoints');
   const codeDiv = document.getElementById('codeExplanations');
 
   // Clear previous content
   summaryPara.textContent = '';
-  keyPointsList.innerHTML = '';
   codeDiv.innerHTML = '';
-
   outputBox.classList.remove('hidden');
 
- 
+  // Show summary
   summaryPara.textContent = data.summary || "No summary.";
 
-  if (data.key_points) {
-    data.key_points.forEach(point => {
-      const li = document.createElement('li');
-      li.textContent = point;
-      keyPointsList.appendChild(li);
-    });
-  }
-
-
+  // Show code + explanation one by one
   if (data.code_explanation) {
     data.code_explanation.forEach(block => {
       const wrapper = document.createElement('div');
       wrapper.classList.add('mb-4');
 
+      // Create code block with dark background
       const codeBlock = document.createElement('pre');
-      codeBlock.textContent = block.code;
-      codeBlock.classList.add('bg-white' ,'text-black', 'p-3', 'rounded');
+      const codeElement = document.createElement('code');
+      codeElement.textContent = block.code;
+      codeElement.classList.add('language-javascript'); // You can change the language if needed
+
+      codeBlock.appendChild(codeElement);
+      
+      // Apply Tailwind classes with more specificity for dark background and text color
+      codeBlock.classList.add('rounded', 'overflow-x-auto', 'bg-[#171717]', 'text-white', 'p-4', 'border', 'border-gray-700');
+
+      // Apply syntax highlighting
+      setTimeout(() => hljs.highlightElement(codeElement), 0);
+
+      // Create copy button
+      const copyBtn = document.createElement('button');
+      copyBtn.textContent = 'Copy Code';
+      copyBtn.classList.add('copy-btn', 'mt-2', 'px-4', 'py-2', 'bg-green-500', 'text-black', 'rounded');
+      copyBtn.addEventListener('click', () => {
+        navigator.clipboard.writeText(block.code).then(() => {
+          copyBtn.textContent = 'Copied!';
+          setTimeout(() => { copyBtn.textContent = 'Copy Code'; }, 1500); // Reset button text after 1.5s
+        });
+      });
+
+      // Add copy button below code
+      codeBlock.appendChild(copyBtn);
 
       const explanation = document.createElement('p');
       explanation.textContent = block.explanation;
@@ -94,6 +167,26 @@ document.getElementById('summaryForm').addEventListener('submit', async function
     });
   }
 
+  // Show key points as list
+  if (data.key_points) {
+    const keyPointsHeading = document.createElement('h3');
+    keyPointsHeading.classList.add('text-4xl', 'mt-8');
+    keyPointsHeading.textContent = "Key Points";
+    codeDiv.appendChild(keyPointsHeading);
+
+    const ul = document.createElement('ul');
+    ul.classList.add('mt-[20px]', 'list-disc', 'pl-5'); // Added list style
+
+    data.key_points.forEach(point => {
+      const li = document.createElement('li');
+      li.textContent = point;
+      ul.appendChild(li);
+    });
+
+    codeDiv.appendChild(ul);
+  }
+
+  // Handle error
   if (data.error) {
     alert(data.error);
     outputBox.classList.add('hidden');
