@@ -36,12 +36,8 @@ const phrases = [
   typeEffect();
 
 
-
-
-
 document.getElementById('summaryForm').addEventListener('submit', async function(e) {
   e.preventDefault();
-
 
   const url = document.getElementById('urlInput').value;
 
@@ -55,15 +51,21 @@ document.getElementById('summaryForm').addEventListener('submit', async function
 
   const data = await response.json();
 
- 
   const outputBox = document.getElementById('output');
+  const summaryPara = document.getElementById('summary');
+  const keyPointsList = document.getElementById('keyPoints');
+  const codeDiv = document.getElementById('codeExplanations');
+
+  // Clear previous content
+  summaryPara.textContent = '';
+  keyPointsList.innerHTML = '';
+  codeDiv.innerHTML = '';
+
   outputBox.classList.remove('hidden');
 
-  document.getElementById('summary').textContent = data.summary || "No summary.";
+ 
+  summaryPara.textContent = data.summary || "No summary.";
 
-
-  const keyPointsList = document.getElementById('keyPoints');
-  keyPointsList.innerHTML = '';
   if (data.key_points) {
     data.key_points.forEach(point => {
       const li = document.createElement('li');
@@ -73,23 +75,27 @@ document.getElementById('summaryForm').addEventListener('submit', async function
   }
 
 
-  const codeDiv = document.getElementById('codeExplanations');
-  codeDiv.innerHTML = '';
   if (data.code_explanation) {
     data.code_explanation.forEach(block => {
+      const wrapper = document.createElement('div');
+      wrapper.classList.add('mb-4');
+
       const codeBlock = document.createElement('pre');
       codeBlock.textContent = block.code;
+      codeBlock.classList.add('bg-white' ,'text-black', 'p-3', 'rounded');
 
       const explanation = document.createElement('p');
       explanation.textContent = block.explanation;
+      explanation.classList.add('mt-2');
 
-      codeDiv.appendChild(codeBlock);
-      codeDiv.appendChild(explanation);
+      wrapper.appendChild(codeBlock);
+      wrapper.appendChild(explanation);
+      codeDiv.appendChild(wrapper);
     });
   }
 
   if (data.error) {
     alert(data.error);
-    outputBox.classList.add('hidden'); 
+    outputBox.classList.add('hidden');
   }
 });
