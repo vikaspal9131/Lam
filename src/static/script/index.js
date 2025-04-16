@@ -1,9 +1,9 @@
 const phrases = [
-    "Enter a URL...",
-    "Paste your link here...",
-    "Type something amazing...",
-    "Drop your website link...",
-  ];
+  "Share your documentation link here...",
+  "Paste the URL of your documentation...",
+  "Enter the link to your project docs...",
+  "Drop your documentation page URL...",
+];
 
   const input = document.getElementById("urlInput");
   let currentPhraseIndex = 0;
@@ -37,99 +37,101 @@ const phrases = [
 
 
 
-document.getElementById('summaryForm').addEventListener('submit', async function (e) {
-  e.preventDefault();
-
-  const url = document.getElementById('urlInput').value;
-
-  const response = await fetch('/api/summary', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/x-www-form-urlencoded',
-    },
-    body: new URLSearchParams({ url: url })
-  });
-
-  const data = await response.json();
-
-  const outputBox = document.getElementById('output');
-  const summaryPara = document.getElementById('summary');
-  const codeDiv = document.getElementById('codeExplanations');
-
-  // Clear previous content
-  summaryPara.textContent = '';
-  codeDiv.innerHTML = '';
-  outputBox.classList.remove('hidden');
-
-  // Show summary
-  summaryPara.textContent = data.summary || "No summary.";
-
-  // Show code + explanation one by one
-  if (data.code_explanation) {
-    data.code_explanation.forEach(block => {
-      const wrapper = document.createElement('div');
-      wrapper.classList.add('mb-4');
-
-      // Create code block with dark background
-      const codeBlock = document.createElement('pre');
-      const codeElement = document.createElement('code');
-      codeElement.textContent = block.code;
-      codeElement.classList.add('language-javascript'); // You can change the language if needed
-
-      codeBlock.appendChild(codeElement);
-      
-      // Apply Tailwind classes with more specificity for dark background and text color
-      codeBlock.classList.add('rounded', 'overflow-x-auto', 'bg-[#171717]', 'text-white', 'p-4');
-
-      // Apply syntax highlighting
-      setTimeout(() => hljs.highlightElement(codeElement), 0);
-
-      // Create copy button
-      const copyBtn = document.createElement('button');
-      copyBtn.textContent = 'Copy Code';
-      copyBtn.classList.add('copy-btn', 'mt-2', 'px-4', 'py-2', 'bg-green-500', 'text-black', 'rounded');
-      copyBtn.addEventListener('click', () => {
-        navigator.clipboard.writeText(block.code).then(() => {
-          copyBtn.textContent = 'Copied!';
-          setTimeout(() => { copyBtn.textContent = 'Copy Code'; }, 1500); // Reset button text after 1.5s
+  document.getElementById('summaryForm').addEventListener('submit', async function (e) {
+    e.preventDefault();
+  
+    const url = document.getElementById('urlInput').value;
+  
+    const response = await fetch('/api/summary', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded',
+      },
+      body: new URLSearchParams({ url: url })
+    });
+  
+    const data = await response.json();
+  
+    const outputBox = document.getElementById('output');
+    const summaryPara = document.getElementById('summary');
+    const codeDiv = document.getElementById('codeExplanations');
+  
+   
+    summaryPara.textContent = '';
+    codeDiv.innerHTML = '';
+    outputBox.classList.remove('hidden');
+  
+    
+    summaryPara.textContent = data.summary || "No summary.";
+  
+  
+    if (data.code_explanation && data.code_explanation.length > 0) {
+      data.code_explanation.forEach(block => {
+        const wrapper = document.createElement('div');
+        wrapper.classList.add('mb-4');
+  
+        
+        const codeBlock = document.createElement('pre');
+        const codeElement = document.createElement('code');
+        codeElement.textContent = block.code;
+        codeElement.classList.add('language-javascript'); 
+  
+        codeBlock.appendChild(codeElement);
+        codeBlock.classList.add('rounded', 'overflow-x-auto', 'bg-[#171717]', 'text-white', 'p-4');
+  
+       
+        setTimeout(() => hljs.highlightElement(codeElement), 0);
+  
+        const copyBtn = document.createElement('button');
+        copyBtn.textContent = 'Copy Code';
+        copyBtn.classList.add('copy-btn', 'mt-2', 'px-4', 'py-2', 'bg-green-500', 'text-black', 'rounded');
+        copyBtn.addEventListener('click', () => {
+          navigator.clipboard.writeText(block.code).then(() => {
+            copyBtn.textContent = 'Copied!';
+            setTimeout(() => { copyBtn.textContent = 'Copy Code'; }, 1500);
+          });
         });
+  
+        codeBlock.appendChild(copyBtn);
+  
+        const explanation = document.createElement('p');
+        explanation.textContent = block.explanation;
+        explanation.classList.add('mt-2');
+  
+        wrapper.appendChild(codeBlock);
+        wrapper.appendChild(explanation);
+        codeDiv.appendChild(wrapper);
       });
-
-      // Add copy button below code
-      codeBlock.appendChild(copyBtn);
-
-      const explanation = document.createElement('p');
-      explanation.textContent = block.explanation;
-      explanation.classList.add('mt-2');
-
-      wrapper.appendChild(codeBlock);
-      wrapper.appendChild(explanation);
-      codeDiv.appendChild(wrapper);
-    });
-  }
-
-  // Show key points as list
-  if (data.key_points) {
-    const keyPointsHeading = document.createElement('h3');
-    keyPointsHeading.classList.add('text-4xl', 'mt-8');
-    keyPointsHeading.textContent = "Key Points";
-    codeDiv.appendChild(keyPointsHeading);
-
-    const ul = document.createElement('ul');
-    ul.classList.add('mt-[20px]', 'list-disc', 'pl-5'); // Added list style
-
-    data.key_points.forEach(point => {
-      const li = document.createElement('li');
-      li.textContent = point;
-      ul.appendChild(li);
-    });
-
-    codeDiv.appendChild(ul);
-  }
-
-  // Handle error
-  if (data.error) {
-    alert(data.error);
-    outputBox.classList.add('hidden');
-  }
-});
+    } else {
+      const noCodeMsg = document.createElement('p');
+      noCodeMsg.textContent = "⚠️ No code available.";
+      noCodeMsg.classList.add('text-gray-500', 'mt-4');
+      codeDiv.appendChild(noCodeMsg);
+    }
+  
+   
+    if (data.key_points) {
+      const keyPointsHeading = document.createElement('h3');
+      keyPointsHeading.classList.add('text-4xl', 'mt-8');
+      keyPointsHeading.textContent = "Key Points";
+      codeDiv.appendChild(keyPointsHeading);
+  
+      const ul = document.createElement('ul');
+      ul.classList.add('mt-[20px]', 'list-disc', 'pl-5');
+  
+      data.key_points.forEach(point => {
+        const li = document.createElement('li');
+        li.textContent = point;
+        ul.appendChild(li);
+      });
+  
+      codeDiv.appendChild(ul);
+    }
+  
+  
+    if (data.error) {
+      alert(data.error);
+      outputBox.classList.add('hidden');
+    }
+  });
+  
