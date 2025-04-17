@@ -10,15 +10,18 @@ onAuthStateChanged(auth, (user) => {
 document.getElementById('summaryForm')?.addEventListener('submit', async function (e) {
   e.preventDefault();
 
-  const submitBtn = this.querySelector('button[type="submit"]');
-  const originalText = submitBtn.textContent;
-  submitBtn.textContent = 'Processing...';
-  submitBtn.disabled = true;
+ 
 
   if (!currentUser) {
+    alert("To use this service, you need to login first. Do you want to proceed to login?");
     window.location.href = "/login";
     return;
   }
+
+  const submitBtn = this.querySelector('button[type="submit"]');
+  const originalText = submitBtn.textContent;
+  submitBtn.textContent = 'Processing..';
+  submitBtn.disabled = true;
 
   const url = document.getElementById('urlInput').value;
 
