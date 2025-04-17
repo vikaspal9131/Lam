@@ -2,7 +2,7 @@
 
 Yunexa simplifies complex tech documents by processing URLs, making it easy for everyone—from beginners to professionals—to grasp key concepts quickly and clearly.
 
-![Project Image](src\image\project.png)
+![Project Image](project.png)
 
 ## Features
 
